@@ -1,0 +1,157 @@
+<div class="container-fluid bg-light min-vh-100 py-4">
+  <div class="container bg-white p-4 rounded shadow">
+    <!-- Header -->
+    <div class="mb-4">
+      <h2 class="text-primary">RICA - Import Permit</h2>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="importPermitForm" (ngSubmit)="onSubmit()">
+      <!-- Business Owner Details Section -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Business Owner Details</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <!-- Citizenship -->
+              <div class="mb-3">
+                <label for="citizenship" class="form-label">Applicant Citizenship*</label>
+                <select id="citizenship" formControlName="citizenship" class="form-select">
+                  <option value="">Select citizenship</option>
+                  <option value="rwandan">Rwandan</option>
+                  <option value="foreigner">Foreigner</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="shouldShowError('citizenship')">
+                  <span *ngIf="getControl('citizenship').errors?.['required']">Citizenship is required.</span>
+                </div>
+              </div>
+
+              <!-- Phone Number -->
+              <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <div class="input-group">
+                  <span class="input-group-text">+250</span>
+                  <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control">
+                </div>
+                <div class="invalid-feedback" *ngIf="shouldShowError('phoneNumber')">
+                  <span *ngIf="getControl('phoneNumber').errors?.['pattern']">Invalid phone number.</span>
+                </div>
+              </div>
+
+              <!-- ID/Passport Section -->
+              <div class="mb-3" *ngIf="importPermitForm.get('citizenship')?.value === 'rwandan'">
+                <label for="idNumber" class="form-label">Identification Document Number*</label>
+                <input id="idNumber" type="text" formControlName="idNumber" class="form-control">
+                <div class="invalid-feedback" *ngIf="shouldShowError('idNumber')">
+                  <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required.</span>
+                </div>
+              </div>
+              <div class="mb-3" *ngIf="importPermitForm.get('citizenship')?.value === 'foreigner'">
+                <label for="passportNumber" class="form-label">Passport Number*</label>
+                <input id="passportNumber" type="text" formControlName="passportNumber" class="form-control">
+                <div class="invalid-feedback" *ngIf="shouldShowError('passportNumber')">
+                  <span *ngIf="getControl('passportNumber').errors?.['required']">Passport number is required.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter an email address">
+                <div class="invalid-feedback" *ngIf="shouldShowError('email')">
+                  <span *ngIf="getControl('email').errors?.['email']">Invalid email format.</span>
+                </div>
+              </div>
+
+              <!-- Names -->
+              <div class="mb-3">
+                <label for="otherNames" class="form-label">Other Names*</label>
+                <input id="otherNames" type="text" formControlName="otherNames" class="form-control">
+                <div class="invalid-feedback" *ngIf="shouldShowError('otherNames')">
+                  <span *ngIf="getControl('otherNames').errors?.['required']">Other names are required.</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="surname" class="form-label">Surname*</label>
+                <input id="surname" type="text" formControlName="surname" class="form-control">
+                <div class="invalid-feedback" *ngIf="shouldShowError('surname')">
+                  <span *ngIf="getControl('surname').errors?.['required']">Surname is required.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Details Section -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Business Details</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <!-- Business Type -->
+              <div class="mb-3">
+                <label for="businessType" class="form-label">Business Type*</label>
+                <select id="businessType" formControlName="businessType" class="form-select">
+                  <option value="">Select business type</option>
+                  <option value="retailer">Retailer</option>
+                  <option value="wholesale">Wholesale</option>
+                  <option value="manufacturer">Manufacturer</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="shouldShowError('businessType')">
+                  <span *ngIf="getControl('businessType').errors?.['required']">Business type is required.</span>
+                </div>
+              </div>
+
+              <!-- TIN Number -->
+              <div class="mb-3">
+                <label for="tinNumber" class="form-label">TIN Number*</label>
+                <input id="tinNumber" type="text" formControlName="tinNumber" class="form-control" placeholder="Enter TIN Number">
+                <div class="invalid-feedback" *ngIf="shouldShowError('tinNumber')">
+                  <span *ngIf="getControl('tinNumber').errors?.['required']">TIN number is required.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <!-- Company Name -->
+              <div class="mb-3">
+                <label for="companyName" class="form-label">Company Name*</label>
+                <input id="companyName" type="text" formControlName="companyName" class="form-control" placeholder="Enter company name">
+                <div class="invalid-feedback" *ngIf="shouldShowError('companyName')">
+                  <span *ngIf="getControl('companyName').errors?.['required']">Company name is required.</span>
+                </div>
+              </div>
+
+              <!-- Registration Date -->
+              <div class="mb-3">
+                <label for="registrationDate" class="form-label">Registration Date*</label>
+                <input id="registrationDate" type="date" formControlName="registrationDate" class="form-control">
+                <div class="invalid-feedback" *ngIf="shouldShowError('registrationDate')">
+                  <span *ngIf="getControl('registrationDate').errors?.['required']">Registration date is required.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Navigation -->
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary">Previous</button>
+        <button type="button" class="btn btn-primary">Next</button>
+      </div>
+    </form>
+  </div>
+</div>
