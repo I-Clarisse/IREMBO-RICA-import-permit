@@ -1,0 +1,206 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import emailjs from '@emailjs/browser';
+
+@Component({
+  selector: 'app-form',
+  templateUrl: './form.component.html',
+  styleUrl: './form.component.css'
+})
+export class FormComponent implements OnInit {
+  importPermitForm !: FormGroup;
+  isSubmitting = false;
+  submitMessage = '';
+  submitStatus: 'success' | 'error' | '' = '';
+  showDebug = false; // Set to true to see form state
+
+  constructor(private fb: FormBuilder) {
+    this.initializeForm();
+  }
+
+  ngOnInit(): void {
+    // emailjs.init("YOUR_PUBLIC_KEY");
+    emailjs.init("6c1oV4SgqgFfAu1W5");
+
+    // Subscribe to form value changes if needed
+    this.importPermitForm.valueChanges.subscribe(values => {
+      console.log('Form values changed:', values);
+    });
+
+    // Subscribe to form status changes if needed
+    this.importPermitForm.statusChanges.subscribe(status => {
+      console.log('Form status changed:', status);
+    });
+  }
+
+  // initializeForm() {
+  //   this.importPermitForm = this.fb.group({
+  //     idNumber: ['', [
+  //       Validators.required,
+  //       Validators.minLength(12),
+  //       Validators.pattern('^[0-9]*$')
+  //     ]],
+  //     testLanguage: ['', Validators.required],
+  //     district: ['', Validators.required]
+  //   })
+  // }
+
+  initializeForm(): void {
+    this.importPermitForm = this.fb.group({
+      citizenship: ['', Validators.required],
+      idNumber: ['', Validators.required],
+      passportNumber: ['', Validators.required],
+      otherNames: ['', Validators.required],
+      surname: ['', Validators.required],
+      nationality: ['', Validators.required],
+      phoneNumber: ['', Validators.pattern('^[0-9]{10}$')],
+      email: ['', [Validators.required, Validators.email]],
+      businessType: ['', Validators.required],
+      companyName: ['', Validators.required],
+      tinNumber: ['', Validators.required],
+      registrationDate: ['', Validators.required],
+      importPurpose: ['', Validators.required],
+      specifyPurpose: [''],
+      productCategory: ['', Validators.required],
+      productName: ['', Validators.required],
+      weight: ['', Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')],
+      description: ['', Validators.required],
+      unitMeasurement: ['', Validators.required],
+      quantity: ['', [Validators.required, Validators.min(1)]]
+    });
+
+    // Conditional validation for passportNumber or idNumber
+    this.importPermitForm.get('citizenship')?.valueChanges.subscribe(value => {
+      if (value === 'rwandan') {
+        this.importPermitForm.get('idNumber')?.setValidators([Validators.required]);
+        this.importPermitForm.get('passportNumber')?.clearValidators();
+      } else if (value === 'foreigner') {
+        this.importPermitForm.get('passportNumber')?.setValidators([Validators.required]);
+        this.importPermitForm.get('idNumber')?.clearValidators();
+      }
+      this.importPermitForm.get('idNumber')?.updateValueAndValidity();
+      this.importPermitForm.get('passportNumber')?.updateValueAndValidity();
+    });
+
+    // Conditional validation for specifyPurpose
+    this.importPermitForm.get('importPurpose')?.valueChanges.subscribe(value => {
+      if (value === 'other') {
+        this.importPermitForm.get('specifyPurpose')?.setValidators([Validators.required]);
+      } else {
+        this.importPermitForm.get('specifyPurpose')?.clearValidators();
+      }
+      this.importPermitForm.get('specifyPurpose')?.updateValueAndValidity();
+    });
+  }
+  getControl(name: string):AbstractControl {
+    return this.importPermitForm.get(name) as AbstractControl;
+  }
+
+  shouldShowError(controlName: string): boolean {
+    const control = this.getControl(controlName);
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  getFullName(): string {
+    return this.importPermitForm.get('idNumber')?.valid ? 'IRADUKUNDA Clarisse' : '';
+  }
+
+  async onSubmit() {
+    if (this.importPermitForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+      this.submitMessage = '';
+
+      try {
+        const formValue = this.importPermitForm.value;
+        
+        // const templateParams = {
+        //   idNumber: formValue.idNumber,
+        //   fullName: this.getFullName(),
+        //   testLanguage: formValue.testLanguage,
+        //   district: formValue.district,
+        //   to_email: 'clarisse2526@gmail.com'
+        // };
+
+        const templateParams = {
+          citizenship: this.importPermitForm.get('citizenship')?.value,
+          idNumber: this.importPermitForm.get('idNumber')?.value,
+          passportNumber: this.importPermitForm.get('passportNumber')?.value,
+          otherNames: this.importPermitForm.get('otherNames')?.value,
+          surname: this.importPermitForm.get('surname')?.value,
+          nationality: this.importPermitForm.get('nationality')?.value,
+          phoneNumber: this.importPermitForm.get('phoneNumber')?.value,
+          email: this.importPermitForm.get('email')?.value,
+          businessType: this.importPermitForm.get('businessType')?.value,
+          companyName: this.importPermitForm.get('companyName')?.value,
+          tinNumber: this.importPermitForm.get('tinNumber')?.value,
+          registrationDate: this.importPermitForm.get('registrationDate')?.value,
+          importPurpose: this.importPermitForm.get('importPurpose')?.value,
+          specifyPurpose: this.importPermitForm.get('specifyPurpose')?.value,
+          productCategory: this.importPermitForm.get('productCategory')?.value,
+          productName: this.importPermitForm.get('productName')?.value,
+          weight: this.importPermitForm.get('weight')?.value,
+          description: this.importPermitForm.get('description')?.value,
+          unitMeasurement: this.importPermitForm.get('unitMeasurement')?.value,
+          quantity: this.importPermitForm.get('quantity')?.value,
+        };
+        // await emailjs.send("SERVICE_id", "YOUR_TEMPLATE_ID", templateParams);
+        await emailjs.send("service_s9x0l2r", "template_m818vmi", templateParams);
+
+        
+        this.submitMessage = 'Application submitted successfully!';
+        this.submitStatus = 'success';
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        this.submitMessage = 'Error submitting application. Please try again.';
+        this.submitStatus = 'error';
+      } finally {
+        this.isSubmitting = false;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+<label for="idNumber" class="form-label">Identification document number*</label>
+                   <input
+                       id="idNumber"
+                       type="text"
+                       formControlName="idNumber"
+                       class="form-control"
+                       [class.is-invalid]="shouldShowError('idNumber')"
+                   >
+                   <div class="invalid-feedback" *ngIf="shouldShowError('idNumber')">
+                       <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required</span>
+                       <span *ngIf="getControl('idNumber').errors?.['minlength']">ID must be at least 12 characters</span>
+                       <span *ngIf="getControl('idNumber').errors?.['pattern']">ID must contain only numbers</span>
+                   </div>
+               </div>
+
+
+               const templateParams = {
+          citizenship: this.importPermitForm.get('citizenship')?.value,
+          idNumber: this.importPermitForm.get('idNumber')?.value,
+          passportNumber: this.importPermitForm.get('passportNumber')?.value,
+          otherNames: this.importPermitForm.get('otherNames')?.value,
+          surname: this.importPermitForm.get('surname')?.value,
+          nationality: this.importPermitForm.get('nationality')?.value,
+          phoneNumber: this.importPermitForm.get('phoneNumber')?.value,
+          email: this.importPermitForm.get('email')?.value,
+          businessType: this.importPermitForm.get('businessType')?.value,
+          companyName: this.importPermitForm.get('companyName')?.value,
+          tinNumber: this.importPermitForm.get('tinNumber')?.value,
+          registrationDate: this.importPermitForm.get('registrationDate')?.value,
+          importPurpose: this.importPermitForm.get('importPurpose')?.value,
+          specifyPurpose: this.importPermitForm.get('specifyPurpose')?.value,
+          productCategory: this.importPermitForm.get('productCategory')?.value,
+          productName: this.importPermitForm.get('productName')?.value,
+          weight: this.importPermitForm.get('weight')?.value,
+          description: this.importPermitForm.get('description')?.value,
+          unitMeasurement: this.importPermitForm.get('unitMeasurement')?.value,
+          quantity: this.importPermitForm.get('quantity')?.value,
+        };

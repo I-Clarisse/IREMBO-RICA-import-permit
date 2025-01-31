@@ -12,7 +12,13 @@ export class FormComponent implements OnInit {
   isSubmitting = false;
   submitMessage = '';
   submitStatus: 'success' | 'error' | '' = '';
-  showDebug = false; // Set to true to see form state
+  showDebug = false; // Set to true to see form state;
+  districts: string[] = [
+    'Nyarugenge', 'Gasabo', 'Kicukiro', 'Burera', 'Gakenke', 'Gicumbi', 'Musanze', 'Rulindo',
+    'Gisagara', 'Huye', 'Kamonyi', 'Muhanga', 'Nyamagabe', 'Nyanza', 'Nyaruguru', 'Ruhango',
+    'Bugesera', 'Gatsibo', 'Kayonza', 'Kirehe', 'Ngoma', 'Nyagatare', 'Rwamagana',
+    'Karongi', 'Ngororero', 'Nyabihu', 'Nyamasheke', 'Rubavu', 'Rusizi', 'Rutsiro'
+  ];
 
   constructor(private fb: FormBuilder) {
     this.initializeForm();
@@ -48,20 +54,20 @@ export class FormComponent implements OnInit {
   initializeForm(): void {
     this.importPermitForm = this.fb.group({
       citizenship: ['', Validators.required],
-      idNumber: ['', [
-        Validators.required,
-        Validators.minLength(12),
-        Validators.pattern(/^[0-9]+$/)
-      ]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      idNumber: ['', [Validators.required, Validators.minLength(16), Validators.pattern(/^[0-9]+$/)]],
       passportNumber: ['', Validators.required],
       otherNames: ['', Validators.required],
       surname: ['', Validators.required],
       nationality: ['', Validators.required],
-      phoneNumber: ['', Validators.pattern('^[0-9]{10}$')],
+      ownerDistrict: ['', Validators.required],
+      businessDistrict: ['', Validators.required],
+
+      // phoneNumber: ['', Validators.pattern('^[0-9]{10}$')],
       email: ['', [Validators.required, Validators.email]],
       businessType: ['', Validators.required],
       companyName: ['', Validators.required],
-      tinNumber: ['', Validators.required],
+      tinNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       registrationDate: ['', Validators.required],
       importPurpose: ['', Validators.required],
       specifyPurpose: [''],
@@ -96,7 +102,7 @@ export class FormComponent implements OnInit {
       this.importPermitForm.get('specifyPurpose')?.updateValueAndValidity();
     });
   }
-  getControl(name: string) {
+  getControl(name: string):AbstractControl {
     return this.importPermitForm.get(name) as AbstractControl;
   }
 
@@ -110,56 +116,70 @@ export class FormComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log(this.importPermitForm.value);
-    if (this.importPermitForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      this.submitMessage = 'Submitting...'; // Show loading message
-      this.submitStatus = ''; // Reset status before submission
-    
-      try {
-        const formValue = this.importPermitForm.value;
-        
-        const templateParams = {
-          citizenship: formValue.citizenship,
-          idNumber: formValue.idNumber,
-          passportNumber: formValue.passportNumber,
-          otherNames: formValue.otherNames,
-          surname: formValue.surname,
-          nationality: formValue.nationality,
-          phoneNumber: formValue.phoneNumber,
-          email: formValue.email,
-          businessType: formValue.businessType,
-          companyName: formValue.companyName,
-          tinNumber: formValue.tinNumber,
-          registrationDate: formValue.registrationDate,
-          importPurpose: formValue.importPurpose,
-          specifyPurpose: formValue.specifyPurpose,
-          productCategory: formValue.productCategory,
-          productName: formValue.productName,
-          weight: formValue.weight,
-          description: formValue.description,
-          unitMeasurement: formValue.unitMeasurement,
-          quantity: formValue.quantity,
-          to_email: formValue.email,  // Dynamically set the recipient email
-        };
-    
-        await emailjs.send("service_s9x0l2r", "template_m818vmi", templateParams);
-    
-        // Success actions
-        this.submitMessage = `Email sent to ${formValue.email}!`;
-        this.submitStatus = 'success'; // Success status
-        this.importPermitForm.reset(); // Clear the form after successful submission
-        
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        this.submitMessage = 'Error submitting application. Please try again.';
-        this.submitStatus = 'error'; // Error status
-      } finally {
-        this.isSubmitting = false;
-      }
+    if (!this.importPermitForm.valid) {
+      this.importPermitForm.markAllAsTouched();
+      return;
+    }
+  
+    if (this.isSubmitting) return;
+  
+    this.isSubmitting = true;
+    this.submitMessage = '';
+    this.submitStatus = '';
+  
+    try {
+      const formValue = this.importPermitForm.value;
+  
+      const setDefault = (value: any) => value && value.trim() !== "" ? value : "N/A";
+
+      const templateParams = {
+        citizenship: formValue.citizenship,
+        idNumber: setDefault(formValue.idNumber),
+        passportNumber: setDefault(formValue.passportNumber),
+        otherNames: formValue.otherNames,
+        surname: formValue.surname,
+        nationality: formValue.nationality,
+        phoneNumber: formValue.phoneNumber,
+        email: formValue.email,
+        businessType: formValue.businessType,
+        companyName: formValue.companyName,
+        ownerDistrict: formValue.ownerDistrict,
+        businessDistrict: formValue.ownerDistrict,
+        tinNumber: formValue.tinNumber,
+        registrationDate: formValue.registrationDate,
+        importPurpose: formValue.importPurpose,
+        specifyPurpose: setDefault(formValue.specifyPurpose),
+        productCategory: formValue.productCategory,
+        productName: formValue.productName,
+        weight: formValue.weight,
+        description: formValue.description,
+        unitMeasurement: formValue.unitMeasurement,
+        quantity: formValue.quantity,
+      };
+
+  
+      // Send the form data using EmailJS
+      await emailjs.send("service_s9x0l2r", "template_m818vmi", templateParams);
+  
+      // Show success message and update button appearance
+      this.submitMessage = 'Application submitted successfully & Email Was sent!';
+      this.submitStatus = 'success';
+  
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        this.importPermitForm.reset();  // Reset form fields
+        this.submitMessage = '';        // Hide submit message
+        this.submitStatus = '';         // Reset button appearance
+      }, 4000);
+  
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      this.submitMessage = 'Error submitting application. Please try again.';
+      this.submitStatus = 'error';
+    } finally {
+      this.isSubmitting = false;
     }
   }
-  
   
   
 

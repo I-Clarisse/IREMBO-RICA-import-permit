@@ -1,8 +1,8 @@
-<div class="container-fluid bg-light min-vh-100 py-4">
-  <div class="container bg-white p-4 rounded shadow">
+<div class="container bg-white p-6 min-vh-100 py-4">
+  <!-- <div class="container bg-white p-4 rounded shadow"> -->
     <!-- Header -->
     <div class="mb-4">
-      <!-- <h2 class="text-primary">RICA - Import Permit</h2> -->
+      <h2 class="text-primary">RICA - Import Permit</h2>
     </div>
 
     <!-- Form -->
@@ -10,95 +10,161 @@
       <!-- Business Owner Details Section -->
       <div class="card mb-5">
         <div class="card-header text-white">
-          <h5 class="mb-0 d-flex align-items-center">
+          <h5 class="mb-0 d-flex align-items-center py-2">
             <i class="bi bi-journal-text me-2"></i> Business Owner Details</h5>
         </div>
         <div class="card-body p-4">
+          <h6 class="card-subtitle mb-3">Business Owner Details</h6>
           <div class="row g-4">
-            <!-- Left Column -->
-            <div class="col-md-6">
-              <!-- Citizenship -->
-              <div class="mb-3">
-                <label for="citizenship" class="form-label">Applicant Citizenship <span class="text-danger">*</span></label>
-                <select id="citizenship" formControlName="citizenship" class="form-select" [class.is-invalid]="getControl('citizenship').invalid && (getControl('citizenship').dirty || getControl('citizenship').touched)">
-                  <option value="">Select citizenship</option>
-                  <option value="rwandan">Rwandan</option>
-                  <option value="foreigner">Foreigner</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="shouldShowError('citizenship')">
-                  Citizenship is required.
+            <!-- first row  -->
+            <div class="col-md-12">
+              <div class="row">
+                <!-- citizenship  -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="citizenship" class="form-label">Applicant Citizenship <span class="text-danger">*</span></label>
+                    <select id="citizenship" formControlName="citizenship" class="form-select" [class.is-invalid]="getControl('citizenship').invalid && (getControl('citizenship').dirty || getControl('citizenship').touched)">
+                      <option value="">Select citizenship</option>
+                      <option value="rwandan">Rwandan</option>
+                      <option value="foreigner">Foreigner</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('citizenship')">
+                      Citizenship is required.
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Phone Number -->
-              <div class="mb-3">
-                <label for="phoneNumber" class="form-label">Phone Number</label>
-                <div class="input-group">
-                  <span class="input-group-text">+250</span>
-                  <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control">
-                </div>
-                <div class="invalid-feedback" *ngIf="shouldShowError('phoneNumber')">
-                  <span *ngIf="getControl('phoneNumber').errors?.['pattern']">Invalid phone number.</span>
-                </div>
-              </div>
-
-              <!-- ID/Passport Section -->
-              <div class="mb-3" *ngIf="importPermitForm.get('citizenship')?.value === 'rwandan'">
-                <label for="idNumber" class="form-label">Identification Document Number <span class="text-danger">*</span></label>
-                <input id="idNumber" type="text" formControlName="idNumber" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('idNumber')">
-                  <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required.</span>
-                  <span *ngIf="getControl('idNumber').errors?.['minlength']">ID must be at least 12 characters.</span>
-                  <span *ngIf="getControl('idNumber').errors?.['pattern']">ID must contain only numbers.</span>
-                </div>
-              </div>
-
-              <div class="mb-3" *ngIf="importPermitForm.get('citizenship')?.value === 'foreigner'">
-                <label for="passportNumber" class="form-label">Passport Number <span class="text-danger">*</span></label>
-                <input id="passportNumber" type="text" formControlName="passportNumber" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('passportNumber')">
-                  <span *ngIf="getControl('passportNumber').errors?.['required']">Passport number is required.</span>
-                </div>
-              </div>
-
-              <!-- Nationality -->
-              <div class="mb-3">
-                <label for="nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
-                <input id="nationality" type="text" formControlName="nationality" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('nationality')">
-                  <span *ngIf="getControl('nationality').errors?.['required']">Nationality is required.</span>
-                </div>
+                <!-- id number  -->
+                 <!-- id number  -->
+                 <div class="col-md-3">
+                  <div class="mb-1" *ngIf="importPermitForm.get('citizenship')?.value === 'rwandan'">
+                    <label for="idNumber" class="form-label">Identification Document Number <span class="text-danger">*</span></label>
+                    <input
+                           id="idNumber"
+                           type="text"
+                           formControlName="idNumber"
+                           class="form-control"
+                           [class.is-invalid]="shouldShowError('idNumber')"
+                       >
+                       <div class="invalid-feedback" *ngIf="getControl('idNumber').invalid && (getControl('idNumber').dirty || getControl('idNumber').touched)">
+                        <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required</span>
+                        <span *ngIf="getControl('idNumber').errors?.['minlength']">ID must be at least 16 characters</span>
+                        <span *ngIf="getControl('idNumber').errors?.['pattern']">ID must contain only numbers</span>
+                      </div>
+                  </div>
+                 </div>
               </div>
             </div>
 
-            <!-- Right Column -->
-            <div class="col-md-6">
-              <!-- Email -->
-              <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter an email address">
-                <div class="invalid-feedback" *ngIf="shouldShowError('email')">
-                  <span *ngIf="getControl('email').errors?.['email']">Invalid email format.</span>
+            <!-- second row -->
+             <div class="col-md-12">
+              <div class="row">
+                <!-- phone number -->
+                 <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <div class="input-group">
+                      <span class="input-group-text">+250</span>
+                      <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control" [class.is-invalid]="shouldShowError('phoneNumber')">
+                    </div>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('phoneNumber')">
+                      <!-- <span *ngIf="getControl('phoneNumber').errors?.['required']">Phone number is required.</span> -->
+                      <span *ngIf="getControl('phoneNumber').errors?.['pattern']">Invalid phone number.</span>
+                    </div>
+                  </div>
+                 </div>
+
+                 <!-- email -->
+                  <div class="col-md-3">             
+                      <div class="mb-1">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter email address" [class.is-invalid]="shouldShowError('email')">
+                        <div class="invalid-feedback" *ngIf="shouldShowError('email')">
+                          <span *ngIf="getControl('email').errors?.['email']">Invalid email format.</span>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+             </div>
+
+             <!-- third row  -->
+              <div class="col-md-12">
+                <div class="row">
+                  <!-- other names  -->
+                   <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="otherNames" class="form-label">Other Names <span class="text-danger">*</span></label>
+                      <input id="otherNames" type="text" formControlName="otherNames" class="form-control" [class.is-invalid]="shouldShowError('otherNames')">
+                      <div class="invalid-feedback" *ngIf="shouldShowError('otherNames')">
+                        <span *ngIf="getControl('otherNames').errors?.['required']">Other names are required.</span>
+                      </div>
+                    </div>
+                   </div>
+
+                   <!-- surname  -->
+                   <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="surname" class="form-label">Surname <span class="text-danger">*</span></label>
+                      <input id="surname" type="text" formControlName="surname" class="form-control" [class.is-invalid]="shouldShowError('surname')">
+                      <div class="invalid-feedback" *ngIf="shouldShowError('surname')">
+                        <span *ngIf="getControl('surname').errors?.['required']">Surname is required.</span>
+                      </div>
+                    </div>
+                   </div>
+                  
                 </div>
               </div>
 
-              <!-- Names -->
-              <div class="mb-3">
-                <label for="otherNames" class="form-label">Other Names <span class="text-danger">*</span></label>
-                <input id="otherNames" type="text" formControlName="otherNames" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('otherNames')">
-                  <span *ngIf="getControl('otherNames').errors?.['required']">Other names are required.</span>
+              <!-- four row  -->
+
+              <div class="col-md-12">
+                <div class="row">
+                  <!-- nationality  -->
+                  <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
+                      <input id="nationality" type="text" formControlName="nationality" class="form-control" [class.is-invalid]="shouldShowError('nationality')">
+                      <div class="invalid-feedback" *ngIf="shouldShowError('nationality')">
+                        <span *ngIf="getControl('nationality').errors?.['required']">Nationality is required.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                   <!-- passportNumber  -->
+                   <div class="col-md-3">
+                    <div class="mb-1" *ngIf="importPermitForm.get('citizenship')?.value === 'foreigner'">
+                      <label for="passportNumber" class="form-label">Passport Number <span class="text-danger">*</span></label>
+                      <input id="passportNumber" type="text" formControlName="passportNumber" class="form-control" [class.is-invalid]="shouldShowError('passportNumber')">
+                      <div class="invalid-feedback" *ngIf="shouldShowError('passportNumber')">
+                        <span *ngIf="getControl('passportNumber').errors?.['required']">Passport number is required.</span>
+                      </div>
+                    </div>
+                   </div>
+
+                   
+
                 </div>
               </div>
 
-              <div class="mb-3">
-                <label for="surname" class="form-label">Surname <span class="text-danger">*</span></label>
-                <input id="surname" type="text" formControlName="surname" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('surname')">
-                  <span *ngIf="getControl('surname').errors?.['required']">Surname is required.</span>
+          <h6 class="card-subtitle my-3 mb-0">Business Owner Address</h6>
+              <!-- fith row  -->
+               <div class="col-md-12">
+                <div class="row">
+                  <!-- owner district  -->
+                   <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="ownerDistrict" class="form-label">Location<span class="text-danger">*</span> </label>
+                      <select id="ownerDistrict" formControlName="ownerDistrict" class="form-select" [class.is-invalid]="shouldShowError('ownerDistrict')">
+                        <option value="">Enter District</option>
+                        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                      </select>
+                      <div class="invalid-feedback" *ngIf="shouldShowError('ownerDistrict')">
+                        <span *ngIf="getControl('ownerDistrict').errors?.['required']"> Owner Location is required.</span>
+                      </div>
+                    </div>
+                   </div>
                 </div>
-              </div>
-            </div>
+               </div>
           </div>
         </div>
       </div>
@@ -106,181 +172,256 @@
       <!-- Business Details Section -->
       <div class="card mb-5">
         <div class="card-header text-white">
-          <h5 class="mb-0 d-flex align-items-center">
+          <h5 class="mb-0 d-flex align-items-center py-2">
             <i class="bi bi-journal-text me-2"></i> Business Details</h5>
         </div>
         <div class="card-body p-4">
+          <h6 class="card-subtitle mb-3">Business Details</h6>
           <div class="row g-4">
-            <!-- Left Column -->
-            <div class="col-md-6">
-              <!-- Business Type -->
-              <div class="mb-3">
-                <label for="businessType" class="form-label">Business Type <span class="text-danger">*</span></label>
-                <select id="businessType" formControlName="businessType" class="form-select">
-                  <option value="">Select business type</option>
-                  <option value="retailer">Retailer</option>
-                  <option value="wholesale">Wholesale</option>
-                  <option value="manufacturer">Manufacturer</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="shouldShowError('businessType')">
-                  <span *ngIf="getControl('businessType').errors?.['required']">Business type is required.</span>
+            <!-- first row -->
+            <div class="col-md-12">
+              <div class="row">
+                <!-- business type -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="businessType" class="form-label">Business Type <span class="text-danger">*</span></label>
+                    <select id="businessType" formControlName="businessType" class="form-select" [class.is-invalid]="shouldShowError('businessType')">
+                      <option value="">Select business type</option>
+                      <option value="retailer">Retailer</option>
+                      <option value="wholesale">Wholesale</option>
+                      <option value="manufacturer">Manufacturer</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('businessType')">
+                      <span *ngIf="getControl('businessType').errors?.['required']">Business type is required.</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <!-- TIN Number -->
-              <div class="mb-3">
-                <label for="tinNumber" class="form-label">TIN Number <span class="text-danger">*</span></label>
-                <input id="tinNumber" type="text" formControlName="tinNumber" class="form-control" placeholder="Enter TIN Number">
-                <div class="invalid-feedback" *ngIf="shouldShowError('tinNumber')">
-                  <span *ngIf="getControl('tinNumber').errors?.['required']">TIN number is required.</span>
+                <!-- TIN Number -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="tinNumber" class="form-label">TIN Number <span class="text-danger">*</span></label>
+                    <input id="tinNumber" type="number" formControlName="tinNumber" class="form-control" placeholder="Enter TIN Number" [class.is-invalid]="shouldShowError('tinNumber')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('tinNumber')">
+                      <span *ngIf="getControl('tinNumber').errors?.['required']">TIN number is required.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Right Column -->
-            <div class="col-md-6">
-              <!-- Company Name -->
-              <div class="mb-3">
-                <label for="companyName" class="form-label">Company Name <span class="text-danger">*</span></label>
-                <input id="companyName" type="text" formControlName="companyName" class="form-control" placeholder="Enter company name">
-                <div class="invalid-feedback" *ngIf="shouldShowError('companyName')">
-                  <span *ngIf="getControl('companyName').errors?.['required']">Company name is required.</span>
+            <!-- second row -->
+            <div class="col-md-12">
+              <div class="row">
+                <!-- Company Name -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="companyName" class="form-label">Company Name <span class="text-danger">*</span></label>
+                    <input id="companyName" type="text" formControlName="companyName" class="form-control" placeholder="Enter company name" [class.is-invalid]="shouldShowError('companyName')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('companyName')">
+                      <span *ngIf="getControl('companyName').errors?.['required']">Company name is required.</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Registration Date -->
-              <div class="mb-3">
-                <label for="registrationDate" class="form-label">Registration Date <span class="text-danger">*</span></label>
-                <input id="registrationDate" type="date" formControlName="registrationDate" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('registrationDate')">
-                  <span *ngIf="getControl('registrationDate').errors?.['required']">Registration date is required.</span>
+                <!-- Registration Date -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="registrationDate" class="form-label">Registration Date <span class="text-danger">*</span></label>
+                    <input id="registrationDate" type="date" formControlName="registrationDate" class="form-control" [class.is-invalid]="shouldShowError('registrationDate')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('registrationDate')">
+                      <span *ngIf="getControl('registrationDate').errors?.['required']">Registration date is required.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <h6 class="card-subtitle my-3 mb-0">Business Address</h6>
+              <!-- fith row  -->
+               <div class="col-md-12">
+                <div class="row">
+                  <!-- owner district  -->
+                   <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="businessDistrict" class="form-label">Location<span class="text-danger">*</span> </label>
+                      <select id="businessDistrict" formControlName="businessDistrict" class="form-select" [class.is-invalid]="shouldShowError('businessDistrict')">
+                        <option value="">Enter District</option>
+                        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                      </select>
+                      <div class="invalid-feedback" *ngIf="shouldShowError('businessDistrict')">
+                        <span *ngIf="getControl('businessDistrict').errors?.['required']"> Business Location is required.</span>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+               </div>
           </div>
         </div>
       </div>
+
 
       <!-- Product Information Section -->
       <div class="card mb-5">
         <div class="card-header text-white">
-          <h5 class="mb-0 d-flex align-items-center">
+          <h5 class="mb-0 d-flex align-items-center py-2">
             <i class="bi bi-journal-text me-2"></i> Product Information</h5>
         </div>
         <div class="card-body p-4">
+          <h6 class="card-subtitle mb-3">Importation Details</h6>
           <div class="row g-4">
-            <!-- Left Column -->
-            <div class="col-md-6">
-              <!-- Purpose of Importation -->
-              <div class="mb-3">
-                <label for="importPurpose" class="form-label">Purpose of Importation <span class="text-danger">*</span></label>
-                <select id="importPurpose" formControlName="importPurpose" class="form-select">
-                  <option value="">Select Purpose</option>
-                  <option value="direct_sale">Direct Sale</option>
-                  <option value="personal_use">Personal Use</option>
-                  <option value="trial_use">Trial Use</option>
-                  <option value="other">Other</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="shouldShowError('importPurpose')">
-                  <span *ngIf="getControl('importPurpose').errors?.['required']">Purpose of importation is required.</span>
+            <!-- first row  -->
+             <div class="col-md-12">
+              <div class="row">
+                <!-- purpose importation  -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="importPurpose" class="form-label">Purpose of Importation <span class="text-danger">*</span></label>
+                    <select id="importPurpose" formControlName="importPurpose" class="form-select" [class.is-invalid]="shouldShowError('importPurpose')">
+                      <option value="">Select Purpose</option>
+                      <option value="direct_sale">Direct Sale</option>
+                      <option value="personal_use">Personal Use</option>
+                      <option value="trial_use">Trial Use</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('importPurpose')">
+                      <span *ngIf="getControl('importPurpose').errors?.['required']">Purpose of importation is required.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- specify purpose ('if other') -->
+                <div class="col-md-3">
+                  <div class="mb-1" *ngIf="importPermitForm.get('importPurpose')?.value === 'other'">
+                    <label for="specifyPurpose" class="form-label">Specify Purpose of Importation <span class="text-danger">*</span></label>
+                    <input id="specifyPurpose" type="text" formControlName="specifyPurpose" class="form-control" [class.is-invalid]="shouldShowError('specifyPurpose')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('specifyPurpose')">
+                      <span *ngIf="getControl('specifyPurpose').errors?.['required']">Please specify the purpose of importation.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+             </div>
 
-              <!-- Specify Purpose (if 'Other') -->
-              <div class="mb-3" *ngIf="importPermitForm.get('importPurpose')?.value === 'other'">
-                <label for="specifyPurpose" class="form-label">Specify Purpose of Importation <span class="text-danger">*</span></label>
-                <input id="specifyPurpose" type="text" formControlName="specifyPurpose" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('specifyPurpose')">
-                  <span *ngIf="getControl('specifyPurpose').errors?.['required']">Please specify the purpose of importation.</span>
+             <!-- second row  -->
+            <h6 class="card-subtitle my-3 mb-0">Product Details</h6>
+
+             <div class="col-md-12">
+              <div class="row">
+                <!-- product caterogy  -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="productCategory" class="form-label">Product Category <span class="text-danger">*</span></label>
+                    <select id="productCategory" formControlName="productCategory" class="form-select" [class.is-invalid]="shouldShowError('productCategory')">
+                      <option value="">Select Category</option>
+                      <option value="general_purpose">General Purpose</option>
+                      <option value="construction_materials">Construction Materials</option>
+                      <option value="chemicals">Chemicals</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('productCategory')">
+                      <span *ngIf="getControl('productCategory').errors?.['required']">Product category is required.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- product name  -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
+                    <input id="productName" type="text" formControlName="productName" class="form-control" [class.is-invalid]="shouldShowError('productName')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('productName')">
+                      <span *ngIf="getControl('productName').errors?.['required']">Product name is required.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+             </div>
 
-              <!-- Product Category -->
-              <div class="mb-3">
-                <label for="productCategory" class="form-label">Product Category <span class="text-danger">*</span></label>
-                <select id="productCategory" formControlName="productCategory" class="form-select">
-                  <option value="">Select Category</option>
-                  <option value="general_purpose">General Purpose</option>
-                  <option value="construction_materials">Construction Materials</option>
-                  <option value="chemicals">Chemicals</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="shouldShowError('productCategory')">
-                  <span *ngIf="getControl('productCategory').errors?.['required']">Product category is required.</span>
+             <!-- third row  -->
+              <div class="col-md-12">
+                <div class="row">
+                  <!-- weight  -->
+                  <div class="col-md-3">
+                    <div class="mb-1">
+                      <label for="weight" class="form-label">Weight (kg)</label>
+                      <input id="weight" type="number" formControlName="weight" class="form-control" [class.is-invalid]="shouldShowError('weight')">
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <!-- Product Name -->
-              <div class="mb-3">
-                <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
-                <input id="productName" type="text" formControlName="productName" class="form-control">
-                <div class="invalid-feedback" *ngIf="shouldShowError('productName')">
-                  <span *ngIf="getControl('productName').errors?.['required']">Product name is required.</span>
+             <!-- fourth row  -->
+             <div class="col-md-12">
+              <div class="row">
+                <!-- unit measurement -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="unitMeasurement" class="form-label">Unit of Measurement <span class="text-danger">*</span></label>
+                    <select id="unitMeasurement" formControlName="unitMeasurement" class="form-select" [class.is-invalid]="shouldShowError('unitMeasurement')">
+                      <option value="">Select Unit</option>
+                      <option value="kgs">Kgs</option>
+                      <option value="tonnes">Tonnes</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('unitMeasurement')">
+                      <span *ngIf="getControl('unitMeasurement').errors?.['required']">Unit of measurement is required.</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- quantity  -->
+                <div class="col-md-3">
+                  <div class="mb-1">
+                    <label for="quantity" class="form-label">Quantity of Product(s) <span class="text-danger">*</span></label>
+                    <input id="quantity" type="number" formControlName="quantity" class="form-control" placeholder="Enter quantity" [class.is-invalid]="shouldShowError('quantity')">
+                    <div class="invalid-feedback" *ngIf="shouldShowError('quantity')">
+                      <span *ngIf="getControl('quantity').errors?.['required']">Quantity is required.</span>
+                      <span *ngIf="getControl('quantity').errors?.['min']">Please provide a number greater than zero.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+             </div>
 
-            <!-- Right Column -->
-            <div class="col-md-6">
-              <!-- Weight -->
-              <div class="mb-3">
-                <label for="weight" class="form-label">Weight (kg)</label>
-                <input id="weight" type="number" formControlName="weight" class="form-control">
-              </div>
-
-              <!-- Description -->
-              <div class="mb-3">
-                <label for="description" class="form-label">Description of Products <span class="text-danger">*</span></label>
-                <textarea id="description" formControlName="description" class="form-control" rows="3"></textarea>
-                <div class="invalid-feedback" *ngIf="shouldShowError('description')">
-                  <span *ngIf="getControl('description').errors?.['required']">Product description is required.</span>
+             <!-- fifth row  -->
+             <div class="col-md-12">
+              <div class="row">
+                <!-- Description  -->
+                <div class="col-md-6">
+                  <div class="mb-1">
+                    <label for="description" class="form-label">Description of Products <span class="text-danger">*</span></label>
+                    <textarea id="description" formControlName="description" class="form-control" rows="3" cols="3" [class.is-invalid]="shouldShowError('description')"></textarea>
+                    <div class="invalid-feedback" *ngIf="shouldShowError('description')">
+                      <span *ngIf="getControl('description').errors?.['required']">Product description is required.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <!-- Unit Measurement -->
-              <div class="mb-3">
-                <label for="unitMeasurement" class="form-label">Unit of Measurement <span class="text-danger">*</span></label>
-                <select id="unitMeasurement" formControlName="unitMeasurement" class="form-select">
-                  <option value="">Select Unit</option>
-                  <option value="kgs">Kgs</option>
-                  <option value="tonnes">Tonnes</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="shouldShowError('unitMeasurement')">
-                  <span *ngIf="getControl('unitMeasurement').errors?.['required']">Unit of measurement is required.</span>
-                </div>
-              </div>
-
-              <!-- Quantity -->
-              <div class="mb-3">
-                <label for="quantity" class="form-label">Quantity of Product(s) <span class="text-danger">*</span></label>
-                <input id="quantity" type="number" formControlName="quantity" class="form-control" placeholder="Enter quantity">
-                <div class="invalid-feedback" *ngIf="shouldShowError('quantity')">
-                  <span *ngIf="getControl('quantity').errors?.['required']">Quantity is required.</span>
-                  <span *ngIf="getControl('quantity').errors?.['min']">Please provide a number greater than zero.</span>
-                </div>
-              </div>
-            </div>
+             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Form Navigation and Submit -->
-      <div class="d-flex justify-content-between mt-4">
-        <div></div>
-        <button
-            type="submit"
-            class="btn btn-primary"
-            [disabled]="!importPermitForm.valid || isSubmitting"
-        >
-            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-        </button>
       </div>
 
       <!-- Submit Message -->
       <div *ngIf="submitMessage" class="mt-4 alert" [ngClass]="{'alert-success': submitStatus === 'success', 'alert-danger': submitStatus === 'error'}">
         {{ submitMessage }}
       </div>
+      <!-- Form Navigation and Submit -->
+      <div class="d-flex justify-content-center mt-4">
+        <button
+          type="submit"
+          class="btn w-25 "
+          [ngClass]="{
+            'btn-primary': !isSubmitting && submitStatus !== 'success',
+            'btn-success': submitStatus === 'success'
+          }"
+          (click)="onSubmit()"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? 'Submitting...' : (submitStatus === 'success' ? 'Submitted!' : 'Submit') }}
+        </button>
+      </div>
+      
+      
+      
     </form>
   </div>
-</div>
+<!-- </div> -->
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
