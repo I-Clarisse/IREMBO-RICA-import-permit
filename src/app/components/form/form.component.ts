@@ -110,10 +110,12 @@ export class FormComponent implements OnInit {
   }
 
   async onSubmit() {
+    console.log(this.importPermitForm.value);
     if (this.importPermitForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
-      this.submitMessage = '';
-  
+      this.submitMessage = 'Submitting...'; // Show loading message
+      this.submitStatus = ''; // Reset status before submission
+    
       try {
         const formValue = this.importPermitForm.value;
         
@@ -140,20 +142,25 @@ export class FormComponent implements OnInit {
           quantity: formValue.quantity,
           to_email: formValue.email,  // Dynamically set the recipient email
         };
-  
+    
         await emailjs.send("service_s9x0l2r", "template_m818vmi", templateParams);
-  
-        this.submitMessage = 'Application submitted successfully!';
-        this.submitStatus = 'success';
+    
+        // Success actions
+        this.submitMessage = `Email sent to ${formValue.email}!`;
+        this.submitStatus = 'success'; // Success status
+        this.importPermitForm.reset(); // Clear the form after successful submission
+        
       } catch (error) {
         console.error('Error submitting form:', error);
         this.submitMessage = 'Error submitting application. Please try again.';
-        this.submitStatus = 'error';
+        this.submitStatus = 'error'; // Error status
       } finally {
         this.isSubmitting = false;
       }
     }
   }
+  
+  
   
 
 }
