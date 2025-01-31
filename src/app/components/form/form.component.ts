@@ -55,8 +55,18 @@ export class FormComponent implements OnInit {
     this.importPermitForm = this.fb.group({
       citizenship: ['', Validators.required],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      idNumber: ['', [Validators.required, Validators.minLength(16), Validators.pattern(/^[0-9]+$/)]],
-      passportNumber: ['', Validators.required],
+      idNumber: ['', [
+        Validators.required,
+        Validators.minLength(16),
+        Validators.maxLength(16),
+        Validators.pattern(/^[0-9]{16}$/)
+      ]],
+      passportNumber: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(9),
+        Validators.pattern(/^[A-Z0-9]{8,9}$/)  // Uppercase letters and numbers only
+      ]],
       otherNames: ['', Validators.required],
       surname: ['', Validators.required],
       nationality: ['', Validators.required],
@@ -67,7 +77,10 @@ export class FormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       businessType: ['', Validators.required],
       companyName: ['', Validators.required],
-      tinNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      tinNumber: ['', [
+        Validators.required, 
+        Validators.pattern(/^[0-9]+$/)
+      ]],
       registrationDate: ['', Validators.required],
       importPurpose: ['', Validators.required],
       specifyPurpose: [''],
@@ -108,7 +121,7 @@ export class FormComponent implements OnInit {
 
   shouldShowError(controlName: string): boolean {
     const control = this.getControl(controlName);
-    return control.invalid && (control.dirty || control.touched);
+    return control && control.invalid && (control.dirty || control.touched);
   }
 
   getFullName(): string {

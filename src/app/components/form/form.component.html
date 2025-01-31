@@ -40,17 +40,18 @@
                   <div class="mb-1" *ngIf="importPermitForm.get('citizenship')?.value === 'rwandan'">
                     <label for="idNumber" class="form-label">Identification Document Number <span class="text-danger">*</span></label>
                     <input
-                           id="idNumber"
-                           type="text"
-                           formControlName="idNumber"
-                           class="form-control"
-                           [class.is-invalid]="shouldShowError('idNumber')"
-                       >
-                       <div class="invalid-feedback" *ngIf="getControl('idNumber').invalid && (getControl('idNumber').dirty || getControl('idNumber').touched)">
-                        <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required</span>
-                        <span *ngIf="getControl('idNumber').errors?.['minlength']">ID must be at least 16 characters</span>
-                        <span *ngIf="getControl('idNumber').errors?.['pattern']">ID must contain only numbers</span>
-                      </div>
+                      id="idNumber"
+                      type="text"
+                      formControlName="idNumber"
+                      class="form-control"
+                      [class.is-invalid]="shouldShowError('idNumber')"
+                      placeholder="Enter Identification Documentation Number"
+                    >
+                    <div class="invalid-feedback" *ngIf="shouldShowError('idNumber')">
+                      <span *ngIf="getControl('idNumber').errors?.['required']">ID number is required</span>
+                      <span *ngIf="getControl('idNumber').errors?.['minlength'] || getControl('idNumber').errors?.['maxlength']">ID must be exactly 16 digits</span>
+                      <span *ngIf="getControl('idNumber').errors?.['pattern']">ID must contain only numbers</span>
+                    </div>
                   </div>
                  </div>
               </div>
@@ -68,7 +69,7 @@
                       <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control" [class.is-invalid]="shouldShowError('phoneNumber')">
                     </div>
                     <div class="invalid-feedback" *ngIf="shouldShowError('phoneNumber')">
-                      <!-- <span *ngIf="getControl('phoneNumber').errors?.['required']">Phone number is required.</span> -->
+                      <span *ngIf="getControl('phoneNumber').errors?.['required']">Phone number is required.</span>
                       <span *ngIf="getControl('phoneNumber').errors?.['pattern']">Invalid phone number.</span>
                     </div>
                   </div>
@@ -80,6 +81,7 @@
                         <label for="email" class="form-label">Email Address</label>
                         <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter email address" [class.is-invalid]="shouldShowError('email')">
                         <div class="invalid-feedback" *ngIf="shouldShowError('email')">
+                          <span *ngIf="getControl('email').errors?.['required']">Email is required.</span>
                           <span *ngIf="getControl('email').errors?.['email']">Invalid email format.</span>
                         </div>
                       </div>
@@ -134,9 +136,19 @@
                    <div class="col-md-3">
                     <div class="mb-1" *ngIf="importPermitForm.get('citizenship')?.value === 'foreigner'">
                       <label for="passportNumber" class="form-label">Passport Number <span class="text-danger">*</span></label>
-                      <input id="passportNumber" type="text" formControlName="passportNumber" class="form-control" [class.is-invalid]="shouldShowError('passportNumber')">
+                      <input
+                        id="passportNumber"
+                        type="text"
+                        formControlName="passportNumber"
+                        class="form-control"
+                        [class.is-invalid]="shouldShowError('passportNumber')"
+                        placeholder="Enter Passport Number"
+                      >
                       <div class="invalid-feedback" *ngIf="shouldShowError('passportNumber')">
-                        <span *ngIf="getControl('passportNumber').errors?.['required']">Passport number is required.</span>
+                        <span *ngIf="getControl('passportNumber').errors?.['required']">Passport number is required</span>
+                        <span *ngIf="getControl('passportNumber').errors?.['minlength']">Passport number must be at least 8 characters</span>
+                        <span *ngIf="getControl('passportNumber').errors?.['maxlength']">Passport number cannot exceed 9 characters</span>
+                        <span *ngIf="getControl('passportNumber').errors?.['pattern']">Passport number must contain only uppercase letters and numbers</span>
                       </div>
                     </div>
                    </div>
@@ -203,7 +215,8 @@
                     <label for="tinNumber" class="form-label">TIN Number <span class="text-danger">*</span></label>
                     <input id="tinNumber" type="number" formControlName="tinNumber" class="form-control" placeholder="Enter TIN Number" [class.is-invalid]="shouldShowError('tinNumber')">
                     <div class="invalid-feedback" *ngIf="shouldShowError('tinNumber')">
-                      <span *ngIf="getControl('tinNumber').errors?.['required']">TIN number is required.</span>
+                      <span *ngIf="getControl('tinNumber').errors?.['required']">TIN number is required</span>
+                      <span *ngIf="getControl('tinNumber').errors?.['pattern']">TIN must contain only numbers</span>
                     </div>
                   </div>
                 </div>
@@ -371,8 +384,8 @@
                     <label for="quantity" class="form-label">Quantity of Product(s) <span class="text-danger">*</span></label>
                     <input id="quantity" type="number" formControlName="quantity" class="form-control" placeholder="Enter quantity" [class.is-invalid]="shouldShowError('quantity')">
                     <div class="invalid-feedback" *ngIf="shouldShowError('quantity')">
-                      <span *ngIf="getControl('quantity').errors?.['required']">Quantity is required.</span>
-                      <span *ngIf="getControl('quantity').errors?.['min']">Please provide a number greater than zero.</span>
+                      <span *ngIf="getControl('quantity').errors?.['required']">Quantity is required</span>
+                      <span *ngIf="getControl('quantity').errors?.['min']">Please provide a number greater than zero</span>
                     </div>
                   </div>
                 </div>
